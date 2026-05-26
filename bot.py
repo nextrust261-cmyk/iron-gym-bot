@@ -25,6 +25,38 @@ quotes = [
 ]
 
 # =========================
+# ФОТО
+# =========================
+
+PHOTO = "banner.jpg"
+
+# =========================
+# ФУНКЦИЯ ОБНОВЛЕНИЯ ЭКРАНА
+# =========================
+
+def update_screen(call, text, keyboard):
+
+    try:
+
+        photo = open(PHOTO, "rb")
+
+        media = telebot.types.InputMediaPhoto(
+            photo,
+            caption=text,
+            parse_mode="HTML"
+        )
+
+        bot.edit_message_media(
+            media=media,
+            chat_id=call.message.chat.id,
+            message_id=call.message.message_id,
+            reply_markup=keyboard
+        )
+
+    except Exception as e:
+        print("ОШИБКА:", e)
+
+# =========================
 # START
 # =========================
 
@@ -50,7 +82,7 @@ def start(message):
 
     try:
 
-        photo = open("banner.jpg", "rb")
+        photo = open(PHOTO, "rb")
 
         bot.send_photo(
             message.chat.id,
@@ -68,7 +100,7 @@ def start(message):
         )
 
 # =========================
-# ГЛАВНОЕ МЕНЮ
+# МЕНЮ
 # =========================
 
 @bot.message_handler(func=lambda message: message.text == "📋 Меню")
@@ -123,7 +155,7 @@ def menu(message):
 
     try:
 
-        photo = open("banner.jpg", "rb")
+        photo = open(PHOTO, "rb")
 
         bot.send_photo(
             message.chat.id,
@@ -146,6 +178,11 @@ def menu(message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
+
+    try:
+        bot.answer_callback_query(call.id)
+    except:
+        pass
 
     # =====================
     # ПРОГРАММЫ
@@ -177,11 +214,10 @@ def callback(call):
 
         inline.add(btn1, btn2, btn3, back)
 
-        bot.edit_message_caption(
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            caption="🏋️ <b>ПРОГРАММЫ ТРЕНИРОВОК</b>\n\nВыбери программу:",
-            reply_markup=inline
+        update_screen(
+            call,
+            "🏋️ <b>ПРОГРАММЫ ТРЕНИРОВОК</b>\n\nВыбери программу:",
+            inline
         )
 
     # =====================
@@ -214,15 +250,14 @@ def callback(call):
 
         inline.add(mon, wed, fri, back)
 
-        bot.edit_message_caption(
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            caption="🏋️ <b>FULL BODY</b>\n\nВыбери день тренировки:",
-            reply_markup=inline
+        update_screen(
+            call,
+            "🏋️ <b>FULL BODY</b>\n\nВыбери день тренировки:",
+            inline
         )
 
     # =====================
-    # FULL BODY ПОНЕДЕЛЬНИК
+    # FULL BODY ПН
     # =====================
 
     elif call.data == "fb_mon":
@@ -232,7 +267,7 @@ def callback(call):
 
             "1️⃣ Разминка\n"
             "• Суставная 10-15 минут\n"
-            "• Гиперэкстензии 10-15\n"
+            "• Гиперэкстензии\n"
             "• Разминка запястий\n\n"
 
             "2️⃣ Бабочка — 2x10\n"
@@ -255,15 +290,10 @@ def callback(call):
 
         inline.add(back)
 
-        bot.edit_message_caption(
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            caption=text,
-            reply_markup=inline
-        )
+        update_screen(call, text, inline)
 
     # =====================
-    # FULL BODY СРЕДА
+    # FULL BODY СР
     # =====================
 
     elif call.data == "fb_wed":
@@ -294,15 +324,10 @@ def callback(call):
 
         inline.add(back)
 
-        bot.edit_message_caption(
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            caption=text,
-            reply_markup=inline
-        )
+        update_screen(call, text, inline)
 
     # =====================
-    # FULL BODY ПЯТНИЦА
+    # FULL BODY ПТ
     # =====================
 
     elif call.data == "fb_fri":
@@ -332,12 +357,7 @@ def callback(call):
 
         inline.add(back)
 
-        bot.edit_message_caption(
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            caption=text,
-            reply_markup=inline
-        )
+        update_screen(call, text, inline)
 
     # =====================
     # SPLIT
@@ -361,12 +381,7 @@ def callback(call):
 
         inline.add(back)
 
-        bot.edit_message_caption(
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            caption=text,
-            reply_markup=inline
-        )
+        update_screen(call, text, inline)
 
     # =====================
     # UPPER LOWER
@@ -390,12 +405,7 @@ def callback(call):
 
         inline.add(back)
 
-        bot.edit_message_caption(
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            caption=text,
-            reply_markup=inline
-        )
+        update_screen(call, text, inline)
 
     # =====================
     # ПИТАНИЕ
@@ -431,12 +441,7 @@ def callback(call):
 
         inline.add(back)
 
-        bot.edit_message_caption(
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            caption=text,
-            reply_markup=inline
-        )
+        update_screen(call, text, inline)
 
     # =====================
     # ДНЕВНИК
@@ -461,12 +466,7 @@ def callback(call):
 
         inline.add(back)
 
-        bot.edit_message_caption(
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            caption=text,
-            reply_markup=inline
-        )
+        update_screen(call, text, inline)
 
     # =====================
     # МОТИВАЦИЯ
@@ -483,12 +483,7 @@ def callback(call):
 
         inline.add(back)
 
-        bot.edit_message_caption(
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            caption=random.choice(quotes),
-            reply_markup=inline
-        )
+        update_screen(call, random.choice(quotes), inline)
 
     # =====================
     # VIP
@@ -505,7 +500,7 @@ def callback(call):
             "🔥 Питание и рекомендации\n"
             "🔥 Поддержка и мотивация\n\n"
 
-            "⚔️ <b>@VVV_Naz</b>"
+            "⚔️ @VVV_Naz"
         )
 
         inline = types.InlineKeyboardMarkup()
@@ -517,12 +512,7 @@ def callback(call):
 
         inline.add(back)
 
-        bot.edit_message_caption(
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            caption=text,
-            reply_markup=inline
-        )
+        update_screen(call, text, inline)
 
     # =====================
     # НАЗАД
@@ -572,15 +562,10 @@ def callback(call):
             "🔥 Выбери нужный раздел"
         )
 
-        bot.edit_message_caption(
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            caption=text,
-            reply_markup=inline
-        )
+        update_screen(call, text, inline)
 
 # =========================
-# СОХРАНЕНИЕ ДНЕВНИКА
+# ДНЕВНИК СОХРАНЕНИЕ
 # =========================
 
 @bot.message_handler(func=lambda message: True)
