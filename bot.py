@@ -31,6 +31,11 @@ quotes = [
 @bot.message_handler(commands=['start'])
 def start(message):
 
+    try:
+        bot.delete_message(message.chat.id, message.message_id)
+    except:
+        pass
+
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
 
     menu_btn = types.KeyboardButton("📋 Меню")
@@ -68,6 +73,11 @@ def start(message):
 
 @bot.message_handler(func=lambda message: message.text == "📋 Меню")
 def menu(message):
+
+    try:
+        bot.delete_message(message.chat.id, message.message_id)
+    except:
+        pass
 
     inline = types.InlineKeyboardMarkup(row_width=2)
 
@@ -579,12 +589,22 @@ def diary_save(message):
     if message.text == "📋 Меню":
         return
 
-    text = (
-        "🔥 <b>ТРЕНИРОВКА СОХРАНЕНА</b>\n\n"
-        f"{message.text}"
+    try:
+        bot.delete_message(message.chat.id, message.message_id)
+    except:
+        pass
+
+    msg = bot.send_message(
+        message.chat.id,
+        "🔥 <b>ТРЕНИРОВКА СОХРАНЕНА</b>"
     )
 
-    bot.send_message(message.chat.id, text)
+    time.sleep(2)
+
+    try:
+        bot.delete_message(message.chat.id, msg.message_id)
+    except:
+        pass
 
 # =========================
 # ЗАПУСК
